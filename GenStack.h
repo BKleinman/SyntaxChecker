@@ -50,7 +50,7 @@ void GenStack<T>::push(T data){
   if(isFull()){
     T* newStack = new T[m_size * 2];//creating a new array that is double the size of the old one(I think this is how they do vectors?)
     for(int i = 0; i < m_size; ++i){
-      newStack = myArray[i];
+      newStack[i] = myArray[i];
     }
     delete myArray;
     myArray = newStack;
