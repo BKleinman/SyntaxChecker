@@ -5,7 +5,7 @@
 class Checker{
 
   public:
-    Checker(string file, GenStack<char>* stack);
+    Checker(string file);
     ~Checker();
     void Check();
 

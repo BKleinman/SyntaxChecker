@@ -18,6 +18,7 @@ class GenStack
     T peek();
     bool isEmpty();
     bool isFull();
+    int getSize();
 
     int m_top; //index of top element
     int m_size; //size of stack
@@ -68,6 +69,7 @@ T GenStack<T>::pop() throw(EmptyStackException){
     }
   }catch (EmptyStackException& e){
     e.getError();
+    exit(1);
   }
   return myArray[m_top--];
 }
@@ -90,4 +92,9 @@ bool GenStack<T>::isFull(){
 template<typename T>
 bool GenStack<T>::isEmpty(){
   return(m_top == -1);
+}
+
+template<typename T>
+int GenStack<T>::getSize(){
+  return m_size;
 }

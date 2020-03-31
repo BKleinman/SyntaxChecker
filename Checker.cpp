@@ -1,8 +1,8 @@
 #include "Checker.h"
 
-Checker::Checker(string file, GenStack<char>* stack){
+Checker::Checker(string file){
   m_file = file;
-  m_stack = stack;
+  m_stack = new GenStack<char>(20);
 }
 
 Checker::~Checker(){
@@ -24,6 +24,7 @@ char Checker::typeMatch(char d){
   }else if(d == '}'){
     return '{';
   }else{
+    cout << "Weird return" << endl;
     return '\0';
   }
 }
@@ -36,18 +37,21 @@ void Checker::Check(){
   inFS.open(m_file);
 
   while(!inFS.eof()){
-    if (!inFS.fail()){
-      inFS >> line;
+    getline(inFS, line);
+    //if (!inFS.fail()){
 
+      cout << line << endl;
       for(int i = 0; i < line.size(); ++i){
         char c = line[i];
 
         if(c == '{' || c == '[' || c == '('){
           m_stack->push(c);
           cout << "Pushing: " << c << endl;
+          cout << "Size: " << m_stack->getSize() << endl;
         }else{
-          switch(c){
-            case ')':
+          //switch(c){
+            //case ')':
+            if(c == ')'){
               if(m_stack->isEmpty()){
                 cout << "Extra " << c << " on line: " << lineCount << endl;//nothing to match with
                 inFS.close();
@@ -60,9 +64,9 @@ void Checker::Check(){
               }
               cout << "Popping: " << m_stack->peek() << endl;
               m_stack->pop();
-              break;
-
-            case ']':
+            //  break;
+            }else if(c == ']'){
+            //case ']':
               if(m_stack->isEmpty()){
                 cout << "Extra " << c << " on line: " << lineCount << endl;//nothing to match with
                 inFS.close();
@@ -75,9 +79,9 @@ void Checker::Check(){
               }
               cout << "Popping: " << m_stack->peek() << endl;
               m_stack->pop();
-              break;
-
-            case '}':
+              //break;
+            }else if(c == '}'){
+            //case '}':
               if(m_stack->isEmpty()){
                 cout << "Extra " << c << " on line: " << lineCount << endl;//nothing to match with
                 inFS.close();
@@ -90,15 +94,15 @@ void Checker::Check(){
               }
               cout << "Popping: " << m_stack->peek() << endl;
               m_stack->pop();
-              break;
-
-            default://almost forgot about this
-              break;
-          }
+              //break;
+            }
+            //default://almost forgot about this
+              //break;
+          //}
         }
       }
       lineCount++;
-    }
+    //}
   }
   if(m_stack->isEmpty()){
     cout << "All delimeters are correct." << endl;
