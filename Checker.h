@@ -12,6 +12,6 @@ class Checker{
   private:
     char typeMatch(char d);
     string m_file;
-    GenStack<char>* m_stack;
+    //GenStack<char>* m_stack;
 
 };

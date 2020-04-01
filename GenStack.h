@@ -56,6 +56,7 @@ void GenStack<T>::push(T data){
     delete myArray;
     myArray = newStack;
     m_size *= 2;
+    myArray[++m_top] = data;
   }else{
     myArray[++m_top] = data;
   }
