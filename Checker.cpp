@@ -1,3 +1,8 @@
+/*
+  Brandon Kleinman - 2291703
+  Assignment 3 - Syntax Checker
+  Method Implementation for a helper class
+ */
 #include "Checker.h"
 
 Checker::Checker(string file){
@@ -10,24 +15,6 @@ Checker::~Checker(){
 }
 
 
-char Checker::typeMatch(char d){
-  if(d == '('){
-    return ')';
-  }else if(d == '['){
-    return ']';
-  }else if(d == '{'){
-    return '}';
-  }else if(d == ')'){
-    return '(';
-  }else if(d == ']'){
-    return '[';
-  }else if(d == '}'){
-    return '{';
-  }else{
-    return '\0';
-  }
-}
-
 void Checker::Check(){
   GenStack<char>* myStack = new GenStack<char>(20);
   char c;
@@ -38,70 +25,62 @@ void Checker::Check(){
 
   while(!inFS.eof()){
     getline(inFS, line);
-    //if (!inFS.fail()){
+    
+    for(int i = 0; i < line.size(); ++i){
+      char c = line[i];
 
-      //cout << line << endl;
-      for(int i = 0; i < line.size(); ++i){
-        char c = line[i];
+      if(c == '{' || c == '[' || c == '('){
+        myStack->push(c);
+      }else{
+        switch(c){
+          case ')':
+            if(myStack->isEmpty()){
+              cout << "Extra " << c << " on line: " << lineCount << endl;//nothing to match with
+              inFS.close();
+              exit(1);
+            }if(myStack->peek() != '('){
+              cout << "Mismatched Delimiters on line: " << lineCount << endl; //wrong type
+              cout << "Opener: " << myStack->peek() << " Closer: " << c << endl;
+              inFS.close();
+              exit(1);
+            }
+            myStack->pop();
+            break;
 
-        if(c == '{' || c == '[' || c == '('){
-          myStack->push(c);
-          //cout << "Pushing: " << c << endl;
-          //cout << "Size: " << myStack->getSize() << endl;
-        }else{
-          switch(c){
-            case ')':
-              if(myStack->isEmpty()){
-                cout << "Extra " << c << " on line: " << lineCount << endl;//nothing to match with
-                inFS.close();
-                exit(1);
-              }if(myStack->peek() != typeMatch(c)){
-                cout << "Mismatched Delimiters on line: " << lineCount << endl; //wrong type
-                cout << "Opener: " << myStack->peek() << " Closer: " << c << endl;
-                inFS.close();
-                exit(1);
-              }
-              //cout << "Popping: " << myStack->peek() << endl;
-              myStack->pop();
-              break;
+          case ']':
+            if(myStack->isEmpty()){
+              cout << "Extra " << c << " on line: " << lineCount << endl;//nothing to match with
+              inFS.close();
+              exit(1);
+            }if(myStack->peek() != '['){
+              cout << "Mismatched Delimiters on line: " << lineCount << endl; //wrong type
+              cout << "Opener: " << myStack->peek() << " Closer: " << c << endl;
+              inFS.close();
+              exit(1);
+            }
+            myStack->pop();
+            break;
 
-            case ']':
-              if(myStack->isEmpty()){
-                cout << "Extra " << c << " on line: " << lineCount << endl;//nothing to match with
-                inFS.close();
-                exit(1);
-              }if(myStack->peek() != typeMatch(c)){
-                cout << "Mismatched Delimiters on line: " << lineCount << endl; //wrong type
-                cout << "Opener: " << myStack->peek() << " Closer: " << c << endl;
-                inFS.close();
-                exit(1);
-              }
-              //cout << "Popping: " << myStack->peek() << endl;
-              myStack->pop();
-              break;
+          case '}':
+            if(myStack->isEmpty()){
+              cout << "Extra " << c << " on line: " << lineCount << endl;//nothing to match with
+              inFS.close();
+              exit(1);
+            }if(myStack->peek() != '{'){
+              cout << "Mismatched Delimiters on line: " << lineCount << endl; //wrong type
+              cout << "Opener: " << myStack->peek() << " Closer: " << c << endl;
+              inFS.close();
+              exit(1);
+            }
+            myStack->pop();
+            break;
 
-            case '}':
-              if(myStack->isEmpty()){
-                cout << "Extra " << c << " on line: " << lineCount << endl;//nothing to match with
-                inFS.close();
-                exit(1);
-              }if(myStack->peek() != typeMatch(c)){
-                cout << "Mismatched Delimiters on line: " << lineCount << endl; //wrong type
-                cout << "Opener: " << myStack->peek() << " Closer: " << c << endl;
-                inFS.close();
-                exit(1);
-              }
-              //cout << "Popping: " << myStack->peek() << endl;
-              myStack->pop();
-              break;
-
-            default://almost forgot about this
-              break;
-          }
+          default://almost forgot about this
+            break;
         }
       }
-      lineCount++;
-    //}
+    }
+    lineCount++;
   }
   if(myStack->isEmpty()){
     cout << "All Delimiters are correct." << endl;

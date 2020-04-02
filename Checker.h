@@ -1,3 +1,8 @@
+/*
+  Brandon Kleinman - 2291703
+  Assignment 3 - Syntax Checker
+  Header file for a helper class
+ */
 #include "GenStack.h"
 #include <fstream>
 
@@ -10,8 +15,7 @@ class Checker{
     void Check();
 
   private:
-    char typeMatch(char d);
     string m_file;
-    //GenStack<char>* m_stack;
+
 
 };
